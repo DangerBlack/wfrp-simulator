@@ -1,0 +1,8 @@
+name: 'Daemon'
+primary: [50,40,45,45,50,35,50,15]
+secondary: [2,15,4,4,4,0,0,0]
+weapon: ['claws','sword','sword',0]
+armor: 1
+faction: 'A'
+skill: 
+- 'canDodge()'

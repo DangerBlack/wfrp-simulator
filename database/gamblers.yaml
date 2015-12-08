@@ -1,0 +1,7 @@
+name: 'Gamblers'
+primary: [25,31,28,32,38,42,30,38]
+secondary: [1,12,2,3,5,0,0,0]
+weapon: ['knife','sword','knife',0]
+armor: 1
+faction: 'A'
+skill: []

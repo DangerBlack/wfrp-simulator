@@ -1,0 +1,17 @@
+#name
+name: 'Wolf'
+#AC  AB   F   R  AG Int Vol Sim
+primary: [30,0,30,30,40,14,25,0]
+#A  Fe  BF  BR   M Mag Fol  PF
+secondary: [1,10,3,3,6,0,0,0]
+#name kind function reloadTime
+#name: the name of the weapon
+#kind: sword (hand weapon) or bow (distance weapon)
+#function: a string that represent the function
+#reloadTime: how long I had to wait till next hit
+weapon:  ['claws','sword','sword',0]
+#armor strenght
+armor: 0
+#faction
+faction: 'A'
+skill: []

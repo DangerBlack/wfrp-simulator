@@ -1,0 +1,7 @@
+name: 'Rakes'
+primary: [36,27,31,30,43,29,30,35]
+secondary: [1,11,3,3,4,0,0,0]
+weapon: ['sword','sword','sword',0]
+armor: 1
+faction: 'A'
+skill: []

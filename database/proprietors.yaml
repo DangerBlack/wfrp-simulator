@@ -1,0 +1,7 @@
+name: 'Proprietors'
+primary: [28,25,28,31,32,43,30,39]
+secondary: [1,12,2,3,4,0,0,0]
+weapon: ['cudgel','sword','sword',0]
+armor: 1
+faction: 'G'
+skill: []

@@ -1,0 +1,7 @@
+name: 'Baggars'
+primary: [25,25,28,37,31,29,37,33]
+secondary: [1,11,2,3,4,0,0,0]
+weapon: ['crutch','sword','hands',0]
+armor: 0
+faction: 'A'
+skill: []

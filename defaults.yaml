@@ -1,0 +1,25 @@
+---
+# Number of simulation that must be done
+
+NUMBER_OF_SIMULATION: 1000
+FOLDER: 'fighters/*'
+
+#LANGUAGE PACK
+
+LENG_PRIMARY: '  WS  BS   S   T  AG Int  WP FEL'
+LENG_SECONDARY: '   A   W  SB  TB   M Mag  IP  FP'
+
+LENG_EXPLAIN: 'After the simulation this is the results for each factions'
+
+#LIFE POINT
+LENG_WOUNDS: 'W'
+
+#Fighter alive
+LENG_ALIVE: 'remain alive'
+
+#Turn of match
+LENG_TURN: 'turn'
+
+LENG_DODGE: 'can dodge'
+
+LENG_FEND: 'can fend'

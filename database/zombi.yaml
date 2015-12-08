@@ -1,0 +1,7 @@
+name: 'Zombi'
+primary: [25,0,35,35,10,100,100,100]
+secondary: [1,12,3,3,4,0,0,0]
+weapon: ['sword','sword','sword',0]
+armor: 1
+faction: 'A'
+skill: []

@@ -1,0 +1,8 @@
+name: 'Sell-swords'
+primary: [35,30,33,35,30,25,35,28]
+secondary: [1,11,3,3,4,0,0,0]
+weapon: ['sword','sword','sword',0]
+armor: 1
+faction: 'A'
+skill:
+- 'canDodge()'

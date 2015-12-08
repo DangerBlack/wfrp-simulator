@@ -1,0 +1,8 @@
+name: 'Town Guards'
+primary: [31,31,33,41,30,38,28,30]
+secondary: [1,12,3,4,4,0,0,0]
+weapon: ['sword','sword','sword',0]
+armor: 1
+faction: 'C'
+skill:
+- 'canDodge()'

@@ -1,0 +1,7 @@
+name: 'Orks'
+primary: [35,35,35,45,25,25,30,20]
+secondary: [1,12,3,4,4,0,0,0]
+weapon: ['Zword','sword','sword',0]
+armor: 3
+faction: 'A'
+skill: []

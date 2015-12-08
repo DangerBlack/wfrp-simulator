@@ -1,0 +1,7 @@
+name: 'Pickpockets'
+primary: [29,25,28,37,31,29,37,33]
+secondary: [1,11,2,3,4,0,0,0]
+weapon: ['knife','sword','knife',0]
+armor: 1
+faction: 'A'
+skill: []

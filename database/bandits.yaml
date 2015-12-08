@@ -1,0 +1,9 @@
+name: 'Bandits'
+primary: [29,42,30,31,35,30,28,25]
+secondary: [1,12,3,3,4,0,0,0]
+weapon: ['bow','bow','arrow',2]
+armor: 1
+faction: 'A'
+skill:
+- 'canDodge()'
+- 'isSharpshooter()'

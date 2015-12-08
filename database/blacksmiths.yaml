@@ -1,0 +1,7 @@
+name: 'Blacksmiths'
+primary: [38,29,42,41,30,34,30,20]
+secondary: [1,11,3,4,3,0,0,0]
+weapon: ['hammer','sword','sword',0]
+armor: 1
+faction: 'G'
+skill: []
