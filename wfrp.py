@@ -387,7 +387,7 @@ workers=[]
 pool = Pool()
 ncore=multiprocessing.cpu_count()
 for i in range(0,ncore):
-	workers.append(pool.apply_async(simulation,[combattenti,NUMBER_OF_SIMULATION/ncore]))
+	workers.append(pool.apply_async(simulation,[combattenti,int(NUMBER_OF_SIMULATION/ncore)]))
 pool.close()
 pool.join()
 
