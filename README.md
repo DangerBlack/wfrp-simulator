@@ -2,9 +2,12 @@
 A python tools for simulating a battle in the wfrp II edition world
 
 ###install
+
+```bash
 sudo apt-get install python-yaml
 pip3 install Pillow
 pip3 install pyyaml
+```
 
 ###usage
 Put in **fighters** folder all the *.yaml* files edited as following
