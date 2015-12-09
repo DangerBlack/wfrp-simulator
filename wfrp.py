@@ -64,18 +64,20 @@ def magicDart(me,target,fighters):
         target.wound(3+me.fury(True))
             
     
-def load_pg_from_file(filename):
+def load_pg_from_file(filename,uid=0):
     config = load_yaml_file(filename)
     a=weapon(config['weapon'][0],config['weapon'][1],config['weapon'][2],config['weapon'][3])
-    f=pg().buildFromAttribute(config['name'],config['primary'],config['secondary'],a,config['armor'],config['faction'],config['skill'])
+    f=pg().buildFromAttribute(str(uid)+' - '+config['name'],config['primary'],config['secondary'],a,config['armor'],config['faction'],config['skill'])
     return f
     
 def load_fighter(folder="fighters/*"):
     fighters=[]
+    count=0
     for f in glob.glob(folder):
-        fighter=load_pg_from_file(f)
+        fighter=load_pg_from_file(f,count)
         print(fighter)
         fighters.append(fighter)
+        count=count+1
     return fighters
 
 def pN(n):
