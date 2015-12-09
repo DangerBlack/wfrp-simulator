@@ -30,10 +30,10 @@ import multiprocessing
 def debug_print(s):
 	pass #print(s)
 def d10():
-	return int(random.random()*10);
+	return int(random.random()*10)+1;
 	
 def d100():
-	return int(random.random()*100);
+	return int(random.random()*100)+1;
 
 def sword(bf):
 	return bf
@@ -46,6 +46,17 @@ def knife(bf):
 	
 def hands(bf):
 	return bf-4
+
+def magicDart(me,target,fighters):
+	dif=6
+	ndice=int(dif/5-me.mag/5)
+	print('lancio incantesimo usando: '+str(max(me.mag,ndice))+' dadi')
+	print('ndice: '+str(ndice))
+	print('me.mag: '+str(me.mag))
+	value=tzeentchCurse(ndice,fighters)
+	if(value>=dif):
+		target.wound(3+self.fury())
+			
 	
 def load_pg_from_file(filename):
 	config = load_yaml_file(filename)
@@ -89,6 +100,10 @@ class pg:
 	maxFend=0 #può parare?
 	nemico=-1
 	sharpshooter=10
+	hasChanneling=True
+	channelingTime=0
+	
+	
 	
 	def resetRoundStatus(self):
 		self.mira=False
@@ -142,16 +157,23 @@ class pg:
 		if(dado<10):
 			return dado
 		else:
-			if(self.arma.kind=='spada'):
-				if(d100()>ac):
+			if(self.arma.kind=='sword'):
+				if(d100()>self.ac):
 					return self.fury()+dado
 				else:
 					return dado
 			else:
-				if(d100()>ab):
-					return self.fury()+dado
+				if(self.arma.kind=='bow'):
+					if(d100()>self.ab):
+						return self.fury()+dado
+					else:
+						return dado
 				else:
-					return dado
+					if(self.arma.kind=='magic'):
+						if(d100()>self.vol):
+							return self.fury()+dado
+						else:
+							return dado
 				
 	
 	def wound(self,danni):
@@ -198,7 +220,7 @@ class pg:
 				self.arma.reloadTime=self.arma.reloadMax
 				self.nemico=target.nome
 				
-	def magic(self,target):
+	def magic(self,fighters,target):
 		pass
 	
 	def sight(self,target):
@@ -211,7 +233,108 @@ class pg:
 	
 	def reloads(self,target):
 		self.arma.reloadTime=self.arma.reloadTime-1
+	
+	
+	def tzeentchCurse(self,ndice,fighters):
+		res=[]
+		for i in range(0,max(self.mag,ndice)):
+			res.append(d10())
+
+		value=0
+		tzeentch=[0,0,0,0,0,0,0,0,0,0]
+		for r in res:
+			tzeentch[r]=tzeentch[r]+1
+			value=value+r
 		
+		for t in tzeentch:
+			if(t>3):
+				self.catastrophicalCaosManifestation(figthers)
+			else:
+				if(t>2):
+					self.majorCaosManifestation(fighters)
+				else:
+					if(t>1):
+						self.minorCaosManifestation(fighters)
+		
+		return value
+		
+	
+	def minorCaosManifestation(self,fighters):
+		res=d100()
+		if(res>96):
+			self.majorCaosManifestation(self,fighters)
+			return 0	
+		if(res>81):
+			self.mag=1
+			return 0
+		if(res>71):
+			self.fe=self.fe-1
+			self.wound(0)
+			return 0
+		return 0
+	
+	def majorCaosManifestation(self,fighters):
+		res=d100()
+		if(res>96):
+			self.catastrophicalCaosManifestation(self,fighters)
+			return 0
+		if(res>81):
+			self.fazione='A'
+			return 0
+		if(res>71):
+			self.mag=1
+			return 0
+		if(res>61):
+			self.r=self.r-10
+			self.br=self.br-1
+			return 0
+		if(res>51):
+			self.fe=self.fe-10
+			self.wound(0) #check if is dead
+			return 0
+		if(res>41):
+			self.fol=self.fol+1
+			return 0
+		if(res>13):
+			#add famiglio a fighters
+			return 0
+		if(res>11):
+			self.mag=0
+			return 0
+	
+	def catastrophicalCaosManifestation(self,fighters):
+		res=d100()
+		if(res>81):
+			self.status=-1
+			self.fe=-5
+			return 0
+		if(res>71):
+			self.fe=self.fe-10
+			self.wound(0)
+			return 0
+		if(res>61):
+			return 0 #evoca demoni minori (self.mag demoni)
+		if(res>51):
+			self.mag=0
+			return 0
+		if(res>41):
+			self.fol=self.fol+d10()
+			return 0
+		if(res>31):
+			if(d10()>5):
+				self.status=-1
+				self.fe=-5
+			return 0
+		if(res>21):
+			self.status=0 #svenuto
+			return 0
+		if(res>11):
+			self.r=self.r-20
+			self.br=self.br-2
+			return 0
+		for f in fighters:
+			f.fe=f.fe-1
+			
 	def getBonusMira(self):
 		if(self.arma.kind=='bow'):
 			if(self.mira):
