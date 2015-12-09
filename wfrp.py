@@ -47,15 +47,21 @@ def knife(bf):
 def hands(bf):
 	return bf-4
 
+def magic():
+	return 0
 def magicDart(me,target,fighters):
 	dif=6
 	ndice=int(dif/5-me.mag/5)
-	print('lancio incantesimo usando: '+str(max(me.mag,ndice))+' dadi')
-	print('ndice: '+str(ndice))
-	print('me.mag: '+str(me.mag))
-	value=tzeentchCurse(ndice,fighters)
+	#print('lancio incantesimo usando: '+str(max(me.mag,ndice))+' dadi')
+	debug_print('ndice: '+str(ndice))
+	debug_print('me.mag: '+str(me.mag))
+	bonus=0
+	if(me.hasChanneling):
+		bonus=me.mag
+	value=me.tzeentchCurse(ndice,fighters)+bonus
 	if(value>=dif):
-		target.wound(3+self.fury())
+		#print('incantesimo lanciato')
+		target.wound(3+me.fury())
 			
 	
 def load_pg_from_file(filename):
@@ -241,7 +247,7 @@ class pg:
 			res.append(d10())
 
 		value=0
-		tzeentch=[0,0,0,0,0,0,0,0,0,0]
+		tzeentch=[0,0,0,0,0,0,0,0,0,0,0]
 		for r in res:
 			tzeentch[r]=tzeentch[r]+1
 			value=value+r
@@ -260,9 +266,10 @@ class pg:
 		
 	
 	def minorCaosManifestation(self,fighters):
+		#print('minor curse')
 		res=d100()
 		if(res>96):
-			self.majorCaosManifestation(self,fighters)
+			self.majorCaosManifestation(fighters)
 			return 0	
 		if(res>81):
 			self.mag=1
@@ -274,9 +281,10 @@ class pg:
 		return 0
 	
 	def majorCaosManifestation(self,fighters):
+		#print('major curse')
 		res=d100()
 		if(res>96):
-			self.catastrophicalCaosManifestation(self,fighters)
+			self.catastrophicalCaosManifestation(fighters)
 			return 0
 		if(res>81):
 			self.fazione='A'
@@ -303,6 +311,7 @@ class pg:
 			return 0
 	
 	def catastrophicalCaosManifestation(self,fighters):
+		print('OH MY GOD - CHTULHU IS HERE')
 		res=d100()
 		if(res>81):
 			self.status=-1
@@ -408,6 +417,8 @@ class pg:
 			else:
 				self.attack(target)
 		
+		if(self.arma.kind=='magic'):
+			magicDart(self,target,fighters)
 
 def oneTeamLeft(fighters):
 	faction=fighters[0].fazione

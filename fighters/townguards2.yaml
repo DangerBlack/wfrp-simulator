@@ -1,7 +1,7 @@
 name: 'Town Guards'
-primary: [31,31,33,41,30,38,28,30]
-secondary: [1,12,3,4,4,0,0,0]
-weapon: ['sword','sword','sword',0]
+primary: [31,31,33,41,30,38,40,30]
+secondary: [1,12,3,4,4,2,0,0]
+weapon: ['magic','magic','magic',0]
 armor: 1
 faction: 'C'
 skill:
