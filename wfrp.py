@@ -61,7 +61,7 @@ def magicDart(me,target,fighters):
 	value=me.tzeentchCurse(ndice,fighters)+bonus
 	if(value>=dif):
 		#print('incantesimo lanciato')
-		target.wound(3+me.fury())
+		target.wound(3+me.fury(True))
 			
 	
 def load_pg_from_file(filename):
@@ -158,28 +158,28 @@ class pg:
 			q=eval('self.'+s)
 		return self
 		
-	def fury(self):
+	def fury(self,magic=False):
 		dado=d10()
 		if(dado<10):
 			return dado
 		else:
+			if(magic):
+				if(d100()>self.vol):
+					return self.fury()+dado
+				else:
+					return dado
 			if(self.arma.kind=='sword'):
 				if(d100()>self.ac):
 					return self.fury()+dado
 				else:
 					return dado
-			else:
-				if(self.arma.kind=='bow'):
-					if(d100()>self.ab):
-						return self.fury()+dado
-					else:
-						return dado
+			if(self.arma.kind=='bow'):
+				if(d100()>self.ab):
+					return self.fury()+dado
 				else:
-					if(self.arma.kind=='magic'):
-						if(d100()>self.vol):
-							return self.fury()+dado
-						else:
-							return dado
+					return dado
+			return dado
+					
 				
 	
 	def wound(self,danni):
@@ -311,7 +311,7 @@ class pg:
 			return 0
 	
 	def catastrophicalCaosManifestation(self,fighters):
-		print('OH MY GOD - CHTULHU IS HERE')
+		debug_print('OH MY GOD - CHTULHU IS HERE')
 		res=d100()
 		if(res>81):
 			self.status=-1
@@ -395,6 +395,10 @@ class pg:
 			self.reloads(target)
 			punti=punti-1
 		
+		if(self.mag>1 and d100()>50):
+			magicDart(self,target,fighters)
+			punti=punti-1
+		
 		if(self.arma.kind=='bow'):
 			if(punti==2):
 				if(self.posizione<1) and (d10()<3):
@@ -416,9 +420,7 @@ class pg:
 					self.attackLightning(target)
 			else:
 				self.attack(target)
-		
-		if(self.arma.kind=='magic'):
-			magicDart(self,target,fighters)
+			
 
 def oneTeamLeft(fighters):
 	faction=fighters[0].fazione
