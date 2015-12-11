@@ -6,4 +6,4 @@ armor: 1
 faction: 'C'
 skill:
 - 'canDodge()'
-- 'magic([["magic dart","attack","magicDart",1]])'
+- 'magic([["magic dart","attack","magicDart",1],["release","attack","releaseForce",1]])'

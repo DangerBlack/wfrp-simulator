@@ -1,3 +1,13 @@
+import random
+#definizione delle classi delle armi e dei personaggi
+class weapon:
+    def __init__(self,name,kind,strength,reloadTime=0):
+        self.name=name
+        self.kind=kind
+        self.strength=eval(strength)        
+        self.reloadTime=reloadTime
+        self.reloadMax=reloadTime
+
 def debug_print(s):
     pass #print(s)
 
@@ -43,7 +53,7 @@ def releaseForce(me,target,fighters):
     if(me.hasChanneling):
         bonus=me.mag
     value=me.tzeentchCurse(ndice,fighters)+bonus
+    print('magia lanciata')
     if(value>=dif):
         if(d100()>target.vol):
-            target.arma=arma('hand','sword','hands',0)
-    
+            target.arma=weapon('hand','sword','hands',0)

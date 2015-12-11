@@ -3,6 +3,9 @@
 
 NUMBER_OF_SIMULATION: 1000
 FOLDER: 'fighters/*'
+DBG_PP_MODE: False
+
+
 
 #LANGUAGE PACK
 
