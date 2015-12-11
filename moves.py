@@ -1,5 +1,11 @@
 def debug_print(s):
     pass #print(s)
+
+def d10():
+    return int(random.random()*10)+1;
+    
+def d100():
+    return int(random.random()*100)+1;
     
 def sword(bf):
     return bf
@@ -29,3 +35,15 @@ def magicDart(me,target,fighters):
     if(value>=dif):
         #print('incantesimo lanciato')
         target.wound(3+me.fury(True))
+
+def releaseForce(me,target,fighters):
+    dif=4
+    ndice=int(dif/5-me.mag/5)
+    bonus=0
+    if(me.hasChanneling):
+        bonus=me.mag
+    value=me.tzeentchCurse(ndice,fighters)+bonus
+    if(value>=dif):
+        if(d100()>target.vol):
+            target.arma=arma('hand','sword','hands',0)
+    

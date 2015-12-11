@@ -30,6 +30,7 @@ from moves import *
 
 def debug_print(s):
     pass #print(s)
+    
 def d10():
     return int(random.random()*10)+1;
     
