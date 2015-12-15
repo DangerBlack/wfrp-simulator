@@ -3,6 +3,11 @@
 from weapon import *
 from config import *
 
+
+def debug_print(who,s):    
+    #pass
+    print('pg*['+who+'] '+s)
+
 def pN(n):
     if(n<10):
         return '  '+str(n)
@@ -10,29 +15,44 @@ def pN(n):
         return ' '+str(n)
     return ''+str(n)   
 
-class pg:
-    status=0
-    
-    #variabili d'ambiente
-    posizione=0 #0 mischia 1 distante 2 riparato distante
-    mira=False #true o false se ha mirato
-    schivata=False #ha già schivato in questo round
-    cantDodge=True #non so schivare?
-    parata=0 #numero di parate fatte nel round
-    maxFend=0 #può parare?
-    nemico=-1
-    sharpshooter=10
-    hasChanneling=True
-    channelingTime=0
-    knowSpell=[] #list of list - [name, kind, function, round requested], kind= attack, defence, buffer, evocation,
-    
-    
+class pg:    
     def resetRoundStatus(self):
         self.mira=False
         self.schivata=self.cantDodge
         self.parata=0
+        for w in (self.waitEvent):
+            debug_print(self.nome,'QUQUE EVENT TIMER IS '+str(w[0]))
+            if(w[0]<=0):
+                debug_print(self.nome,"RING RING EVENT ->| "+self.nome+" | "+w[1]+" | "+self.arma.name)
+                eval(w[1])
+                debug_print(self.nome,self.arma.name)
+                try:        
+                    self.waitEvent.remove(w)
+                except ValueError:
+                    pass
+            else:
+                w[0]=w[0]-1
+                
+        
+        
         
     def __init__(self,nome=None,ac=0,ab=0,f=0,r=0,ag=0,i=0,vol=0,sim=0,a=0,fe=0,bf=0,br=0,m=0,mag=0,fol=0,pf=0,arma=weapon('sword','sword','sword'),armatura=0,fazione=0):
+        self.status=0
+        #variabili d'ambiente
+        self.posizione=0 #0 mischia 1 distante 2 riparato distante
+        self.mira=False #true o false se ha mirato
+        self.schivata=False #ha già schivato in questo round
+        self.cantDodge=True #non so schivare?
+        self.parata=0 #numero di parate fatte nel round
+        self.maxFend=0 #può parare?
+        self.nemico=-1
+        self.sharpshooter=10
+        self.hasChanneling=True
+        self.channelingTime=0
+        self.knowSpell=[] #list of list - [name, kind, function, round requested], kind= attack, defence, buffer, evocation,
+        self.waitEvent=[] #list of event that have a timer [timer, callback]
+        self.azioni=2 #number of action in a round
+        
         self.nome=nome
         self.ab=(ab)
         self.ac=(ac)
@@ -104,14 +124,14 @@ class pg:
         if(da_d>0) and not self.schivata:
             self.schivata=True
             if(d100()<self.ag):
-                debug_print(self.nome+' schiva l\'attacco')
+                debug_print(self.nome,' schiva l\'attacco')
                 da_d=0
         
         if(da_d>0) and self.parata<self.maxFend:
             da_d=0
             self.parata=self.parata+1
                 
-        debug_print(self.nome+' subisce '+str(da_d)+' ferite')
+        debug_print(self.nome,'subisce '+str(da_d)+' ferite')
         if(da_d>0):
             self.fe-=int(da_d)      
         if(self.fe<-5):
@@ -122,13 +142,13 @@ class pg:
             self.status=0
     
     def attackLightning(self,target):
-        debug_print(self.nome+' fa un attacco fulmineo')
+        debug_print(self.nome,' fa un attacco fulmineo')
         for i in range(0,self.a):
             self.attack(target)
             self.nemico=target.nome
     
     def attackInCharge(self,target):
-        debug_print(self.nome+' fa un attacco in carica')
+        debug_print(self.nome,' fa un attacco in carica')
         if(self.posizione>=1):
             if(d100()>self.ac+10):
                 target.wound(self.arma.strength(self.bf)+self.fury())
@@ -136,7 +156,7 @@ class pg:
                 self.nemico=target.nome
     
     def attack(self,target):
-        debug_print(self.nome+' fa un attacco')
+        debug_print(self.nome,' fa un attacco')
         if(d100()>self.ac+self.getBonusMira()):
                 target.wound(self.arma.strength(self.bf)+self.fury())
                 self.arma.reloadTime=self.arma.reloadMax
@@ -146,7 +166,7 @@ class pg:
         self.knowSpell=knowSpell
     
     def sight(self,target):
-        debug_print(self.nome+' mira')
+        debug_print(self.nome,' mira')
         self.mira=True
     
     def disengage(self,target):
@@ -156,7 +176,13 @@ class pg:
     def reloads(self,target):
         self.arma.reloadTime=self.arma.reloadTime-1
     
+    def changeWeapon(self,w):
+        droppedWeapon=self.arma
+        self.arma=w
     
+    def addWaitEvent(self,event):
+        self.waitEvent.append(event);
+        
     def tzeentchCurse(self,ndice,fighters):
         res=[]
         for i in range(0,max(self.mag,ndice)):
@@ -227,7 +253,7 @@ class pg:
             return 0
     
     def catastrophicalCaosManifestation(self,fighters):
-        debug_print('OH MY GOD - CHTULHU IS HERE')
+        debug_print(self.nome,'OH MY GOD - CHTULHU IS HERE')
         res=d100()
         if(res>81):
             self.status=-1
@@ -303,7 +329,7 @@ class pg:
         return self.ini > other.ini
         
     def choseAction(self,fighters,target):
-        punti=2
+        punti=self.azioni
         if(self.arma.reloadTime!=0):
             self.reloads(target)
             punti=punti-1
@@ -314,6 +340,7 @@ class pg:
         
         if(self.mag>1 and d100()>50):
             chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
+            #chosedSpell=self.knowSpell[1]
             eval(chosedSpell[2]+'(self,target,fighters)')            
             #magicDart(self,target,fighters)
             punti=punti-chosedSpell[3]

@@ -8,8 +8,9 @@ class weapon:
         self.reloadTime=reloadTime
         self.reloadMax=reloadTime
 
-def debug_print(s):
-    pass #print(s)
+def debug_print(who,s):    
+    #pass
+    print('weapon*['+who+'] '+s)
 
 def d10():
     return int(random.random()*10)+1;
@@ -36,8 +37,7 @@ def magicDart(me,target,fighters):
     dif=6
     ndice=int(dif/5-me.mag/5)
     #print('lancio incantesimo usando: '+str(max(me.mag,ndice))+' dadi')
-    debug_print('ndice: '+str(ndice))
-    debug_print('me.mag: '+str(me.mag))
+    debug_print(me.nome,'dardo magico')
     bonus=0
     if(me.hasChanneling):
         bonus=me.mag
@@ -53,7 +53,12 @@ def releaseForce(me,target,fighters):
     if(me.hasChanneling):
         bonus=me.mag
     value=me.tzeentchCurse(ndice,fighters)+bonus
-    print('magia lanciata')
     if(value>=dif):
         if(d100()>target.vol):
-            target.arma=weapon('hand','sword','hands',0)
+            debug_print('system','?????????????????????')
+            debug_print(me.nome,'magia lanciata + effetto su ['+target.nome+']')
+            debug_print('system','?????????????????????')
+            target.changeWeapon(weapon('hand','sword','hands',0))
+            target.addWaitEvent([2,'''self.changeWeapon(weapon('sword','sword','sword',0))'''])
+            #target.arma=weapon('hand','sword','hands',0)
+            #target.waitEvent.append([2,'''self.arma = weapon('hand','sword','hands',0)'''])

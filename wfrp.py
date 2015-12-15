@@ -29,8 +29,9 @@ from pg import pg
 
 #Funzioni utili sempre
 
-def debug_print(s):
-    pass #print(s)
+def debug_print(who,s):    
+    #pass
+    print('['+who+'] '+s)
     
 def d10():
     return int(random.random()*10)+1;
@@ -94,18 +95,21 @@ def battle(fighters):
     
     counter=0
     while(not oneTeamLeft(fighters)):
-        debug_print('round '+str(counter))
+        debug_print('system','=======================>round '+str(counter))
         for w in fighters:
+            debug_print(w.nome,'sono armato di '+w.arma.name)
             e=getEnemy(fighters,w)
             if(e != False):
-                debug_print(w.nome+" attacca "+e.nome)
+                debug_print(w.nome,"attacca "+e.nome)
                 w.choseAction(fighters,e)       
                 try:        
                     if(e.status==-1):
                         fighters.remove(e)
                 except ValueError:
-                    pass    
+                    pass
+        debug_print('system','RESETTO IL TURNO')
         for w in fighters:
+            debug_print(w.nome,""+str(len(w.waitEvent)))
             w.resetRoundStatus()
         counter=counter+1
             
@@ -160,35 +164,35 @@ LENG_TURN=config['LENG_TURN']
 
 DBG_PP_MODE=config['DBG_PP_MODE']
 if(not DBG_PP_MODE):
-	workers=[]
-	pool = Pool()
-	ncore=multiprocessing.cpu_count()
-	for i in range(0,ncore):
-		workers.append(pool.apply_async(simulation,[combattenti,int(NUMBER_OF_SIMULATION/ncore)]))
-	pool.close()
-	pool.join()
+    workers=[]
+    pool = Pool()
+    ncore=multiprocessing.cpu_count()
+    for i in range(0,ncore):
+        workers.append(pool.apply_async(simulation,[combattenti,int(NUMBER_OF_SIMULATION/ncore)]))
+    pool.close()
+    pool.join()
 
-	prob={}
-	vita={}
-	nVivi={}
-	turni={}
-	for w in workers:
-		res=w.get()
-		for r in res[0]:
-			prob[r[0]]=prob.get(r[0],0)+res[0][r[0]]    
-			vita[r[0]]=vita.get(r[0],0)+float(res[1][r[0]])
-			nVivi[r[0]]=nVivi.get(r[0],0)+float(res[2][r[0]])
-			turni[r[0]]=turni.get(r[0],0)+float(res[3][r[0]])
+    prob={}
+    vita={}
+    nVivi={}
+    turni={}
+    for w in workers:
+        res=w.get()
+        for r in res[0]:
+            prob[r[0]]=prob.get(r[0],0)+res[0][r[0]]    
+            vita[r[0]]=vita.get(r[0],0)+float(res[1][r[0]])
+            nVivi[r[0]]=nVivi.get(r[0],0)+float(res[2][r[0]])
+            turni[r[0]]=turni.get(r[0],0)+float(res[3][r[0]])
 
-	for key in prob:
-		vita[key]=vita[key]/len(workers)
-		nVivi[key]=nVivi[key]/len(workers)
-		turni[key]=turni[key]/len(workers)
-		prob[key]=prob[key]/len(workers)
-			
-	result=(prob,vita,nVivi,turni)
+    for key in prob:
+        vita[key]=vita[key]/len(workers)
+        nVivi[key]=nVivi[key]/len(workers)
+        turni[key]=turni[key]/len(workers)
+        prob[key]=prob[key]/len(workers)
+            
+    result=(prob,vita,nVivi,turni)
 else:
-	result=simulation(combattenti,NUMBER_OF_SIMULATION)
+    result=simulation(combattenti,NUMBER_OF_SIMULATION)
 
 print(LENG_EXPLAIN)
 for r in result[0]:
