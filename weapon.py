@@ -1,16 +1,22 @@
 import random
+from config import *
+
 #definizione delle classi delle armi e dei personaggi
 class weapon:
     def __init__(self,name,kind,strength,reloadTime=0):
         self.name=name
         self.kind=kind
-        self.strength=eval(strength)        
+        self.strength=eval(strength)
+        self.rawStrenght=strength        
         self.reloadTime=reloadTime
         self.reloadMax=reloadTime
 
+config = load_config_file()
+DBG_PP_MODE=config['DBG_PP_MODE']
+
 def debug_print(who,s):    
-    #pass
-    print('weapon*['+who+'] '+s)
+    if(DBG_PP_MODE):
+        print('weapon*['+who+'] '+s)
 
 def d10():
     return int(random.random()*10)+1;
@@ -37,14 +43,14 @@ def magicDart(me,target,fighters):
     dif=6
     ndice=int(dif/5-me.mag/5)
     #print('lancio incantesimo usando: '+str(max(me.mag,ndice))+' dadi')
-    debug_print(me.nome,'dardo magico')
+    debug_print(me.nome,'magia dardo magico su ['+target.nome+']')
     bonus=0
     if(me.hasChanneling):
         bonus=me.mag
     value=me.tzeentchCurse(ndice,fighters)+bonus
     if(value>=dif):
         #print('incantesimo lanciato')
-        target.wound(3+me.fury(True))
+        target.wound(3+me.fury(True),True)
 
 def releaseForce(me,target,fighters):
     dif=4
@@ -56,9 +62,10 @@ def releaseForce(me,target,fighters):
     if(value>=dif):
         if(d100()>target.vol):
             debug_print('system','?????????????????????')
-            debug_print(me.nome,'magia lanciata + effetto su ['+target.nome+']')
+            debug_print(me.nome,'magia rilascio su ['+target.nome+']')
             debug_print('system','?????????????????????')
+            target.addWaitEvent([2,'self.changeWeapon(weapon(\''+target.arma.name+'\',\''+target.arma.kind+'\',\''+target.arma.rawStrenght+'\','+str(target.arma.reloadTime)+'))'])
             target.changeWeapon(weapon('hand','sword','hands',0))
-            target.addWaitEvent([2,'''self.changeWeapon(weapon('sword','sword','sword',0))'''])
+            
             #target.arma=weapon('hand','sword','hands',0)
             #target.waitEvent.append([2,'''self.arma = weapon('hand','sword','hands',0)'''])

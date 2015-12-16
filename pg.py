@@ -3,10 +3,12 @@
 from weapon import *
 from config import *
 
+config = load_config_file()
+DBG_PP_MODE=config['DBG_PP_MODE']
 
 def debug_print(who,s):    
-    #pass
-    print('pg*['+who+'] '+s)
+    if(DBG_PP_MODE):
+        print('pg*['+who+'] '+s)
 
 def pN(n):
     if(n<10):
@@ -118,20 +120,21 @@ class pg:
                     
                 
     
-    def wound(self,danni):
+    def wound(self,danni,magic=False):
         da_d=int(danni)-int(self.br)-int(self.armatura)
         
-        if(da_d>0) and not self.schivata:
+        if(da_d>0) and not self.schivata and not magic:
             self.schivata=True
             if(d100()<self.ag):
                 debug_print(self.nome,' schiva l\'attacco')
                 da_d=0
         
-        if(da_d>0) and self.parata<self.maxFend:
+        if(da_d>0) and self.parata<self.maxFend and not magic:
             da_d=0
+            debug_print(self.nome,' para l\'attacco')
             self.parata=self.parata+1
                 
-        debug_print(self.nome,'subisce '+str(da_d)+' ferite')
+        debug_print(self.nome,'subisce ['+str(da_d)+'/'+str(self.fe)+'] ferite')
         if(da_d>0):
             self.fe-=int(da_d)      
         if(self.fe<-5):
@@ -146,6 +149,7 @@ class pg:
         for i in range(0,self.a):
             self.attack(target)
             self.nemico=target.nome
+        debug_print(self.nome,' concluso attacco fulmineo')
     
     def attackInCharge(self,target):
         debug_print(self.nome,' fa un attacco in carica')
@@ -154,6 +158,7 @@ class pg:
                 target.wound(self.arma.strength(self.bf)+self.fury())
                 target.posizione=0
                 self.nemico=target.nome
+        debug_print(self.nome,' concluso attacco in carica')
     
     def attack(self,target):
         debug_print(self.nome,' fa un attacco')
@@ -161,6 +166,7 @@ class pg:
                 target.wound(self.arma.strength(self.bf)+self.fury())
                 self.arma.reloadTime=self.arma.reloadMax
                 self.nemico=target.nome
+        debug_print(self.nome,' concluso attacco')
                 
     def magic(self,knowSpell=[]):
         self.knowSpell=knowSpell
@@ -174,6 +180,7 @@ class pg:
         target.posizione=1  
     
     def reloads(self,target):
+        debug_print(self.nome,' ricarico')
         self.arma.reloadTime=self.arma.reloadTime-1
     
     def changeWeapon(self,w):
@@ -330,17 +337,17 @@ class pg:
         
     def choseAction(self,fighters,target):
         punti=self.azioni
-        if(self.arma.reloadTime!=0):
+        if(not self.arma.reloadTime==0):
             self.reloads(target)
             punti=punti-1
         
-        if(self.arma.reloadTime!=0):
+        if(not self.arma.reloadTime==0):
             self.reloads(target)
             punti=punti-1
         
         if(self.mag>1 and d100()>50):
-            chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
-            #chosedSpell=self.knowSpell[1]
+            #chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
+            chosedSpell=self.knowSpell[1]
             eval(chosedSpell[2]+'(self,target,fighters)')            
             #magicDart(self,target,fighters)
             punti=punti-chosedSpell[3]

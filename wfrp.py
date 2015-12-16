@@ -30,8 +30,8 @@ from pg import pg
 #Funzioni utili sempre
 
 def debug_print(who,s):    
-    #pass
-    print('['+who+'] '+s)
+    if(DBG_PP_MODE):
+        print('['+who+'] '+s)
     
 def d10():
     return int(random.random()*10)+1;
@@ -100,7 +100,7 @@ def battle(fighters):
             debug_print(w.nome,'sono armato di '+w.arma.name)
             e=getEnemy(fighters,w)
             if(e != False):
-                debug_print(w.nome,"attacca "+e.nome)
+                debug_print(w.nome,"sceglie bersaglio ["+e.nome+"]")
                 w.choseAction(fighters,e)       
                 try:        
                     if(e.status==-1):
