@@ -1,0 +1,8 @@
+name: 'Deamon Imps'
+primary: [35,0,40,33,40,30,33,15]
+secondary: [1,12,4,3,3,0,0,0]
+weapon: ['sword','sword','sword',0]
+armor: 0
+faction: 'A'
+skill:
+- 'canDodge()'
