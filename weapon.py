@@ -66,6 +66,3 @@ def releaseForce(me,target,fighters):
             debug_print('system','?????????????????????')
             target.addWaitEvent([2,'self.changeWeapon(weapon(\''+target.arma.name+'\',\''+target.arma.kind+'\',\''+target.arma.rawStrenght+'\','+str(target.arma.reloadTime)+'))'])
             target.changeWeapon(weapon('hand','sword','hands',0))
-            
-            #target.arma=weapon('hand','sword','hands',0)
-            #target.waitEvent.append([2,'''self.arma = weapon('hand','sword','hands',0)'''])

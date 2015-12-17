@@ -137,7 +137,7 @@ class pg:
         debug_print(self.nome,'subisce ['+str(da_d)+'/'+str(self.fe)+'] ferite')
         if(da_d>0):
             self.fe-=int(da_d)      
-        if(self.fe<-5):
+        if(self.fe<=-5):
             self.status=-1
         else:
             if(self.fe>-5)and(self.fe<0):
@@ -201,16 +201,19 @@ class pg:
             tzeentch[r]=tzeentch[r]+1
             value=value+r
         
+        res=0
         for t in tzeentch:
             if(t>3):
-                self.catastrophicalCaosManifestation(figthers)
+                res=self.catastrophicalCaosManifestation(fighters)
+                print('tzeentch CURSE '+str(res))
             else:
                 if(t>2):
-                    self.majorCaosManifestation(fighters)
+                    res=self.majorCaosManifestation(fighters)
+                    print('tzeentch CURSE '+str(res))
                 else:
                     if(t>1):
-                        self.minorCaosManifestation(fighters)
-        
+                        res=self.minorCaosManifestation(fighters)
+                        print('tzeentch CURSE '+str(res))
         return value
         
     
@@ -219,14 +222,15 @@ class pg:
         res=d100()
         if(res>96):
             self.majorCaosManifestation(fighters)
-            return 0    
+            return -1    
         if(res>81):
-            self.mag=1
-            return 0
+            self.addWaitEvent([d10(),'self.setMag(\''+str(int(self.mag)+1)+'\')'])
+            self.mag=self.mag-1
+            return -2
         if(res>71):
             self.fe=self.fe-1
             self.wound(0)
-            return 0
+            return -3
         return 0
     
     def majorCaosManifestation(self,fighters):
@@ -234,30 +238,32 @@ class pg:
         res=d100()
         if(res>96):
             self.catastrophicalCaosManifestation(fighters)
-            return 0
+            return -4
         if(res>81):
+            self.addWaitEvent([d10(),'self.changeFaction(\''+self.fazione+ '\')'])
             self.fazione='A'
-            return 0
+            return -5
         if(res>71):
-            self.mag=1
-            return 0
+            self.mag=self.mag-1
+            return -6
         if(res>61):
             self.r=self.r-10
             self.br=self.br-1
-            return 0
+            return -7
         if(res>51):
             self.fe=self.fe-10
             self.wound(0) #check if is dead
-            return 0
+            return -8
         if(res>41):
             self.fol=self.fol+1
-            return 0
+            return -9
         if(res>13):
-            #add famiglio a fighters
-            return 0
+            #add imps to the fighters
+            fighters.append(pg('Daemon Imps',35,0,40,33,40,30,33,15,1,12,4,3,3,0,0,0,weapon('claws','sword','sword'),0,'A'))
+            return -10
         if(res>11):
             self.mag=0
-            return 0
+            return -11
     
     def catastrophicalCaosManifestation(self,fighters):
         debug_print(self.nome,'OH MY GOD - CHTULHU IS HERE')
@@ -265,31 +271,37 @@ class pg:
         if(res>81):
             self.status=-1
             self.fe=-5
-            return 0
+            return -12
         if(res>71):
-            self.fe=self.fe-10
+            self.fe=self.fe-d10()
             self.wound(0)
-            return 0
+            return -13
         if(res>61):
-            return 0 #evoca demoni minori (self.mag demoni)
+            for i in range(0,self.mag):
+                fighters.append(pg('Evoc '+str(i)+' Daemon',50,40,45,45,50,35,50,15,2,15,4,4,4,0,0,0,weapon('claws','sword','sword'),0,'A'))
+            return -14 #evoca demoni minori (self.mag demoni)
         if(res>51):
             self.mag=0
-            return 0
+            return -15
         if(res>41):
             self.fol=self.fol+d10()
-            return 0
+            return -16
         if(res>31):
-            if(d10()>5):
+            if(d10()>5):#critico random
                 self.status=-1
                 self.fe=-5
-            return 0
+            return -17
         if(res>21):
-            self.status=0 #svenuto
-            return 0
+            time=d10()*6
+            self.addWaitEvent([d10(),'self.setAction(\''+str(self.azioni)+ '\')'])
+            self.addWaitEvent([d10(),'self.setBr(\''+str(self.br)+ '\')'])
+            self.azioni=0
+            self.br=0
+            return -18
         if(res>11):
             self.r=self.r-20
             self.br=self.br-2
-            return 0
+            return -19
         for f in fighters:
             f.fe=f.fe-1
             
@@ -310,7 +322,19 @@ class pg:
     
     def isSharpshooter(self):
         self.sharpshooter=20
-            
+    
+    def changeFaction(self,faction):
+        self.fazione=faction
+    
+    def setMag(self,mag):
+        self.mag=int(mag)
+    
+    def setAction(self,action):
+        self.action=int(action)    
+    
+    def setBr(self,br):
+        self.br=int(br)
+                
     def stampa(self):
         print(str(self))
     
@@ -346,8 +370,8 @@ class pg:
             punti=punti-1
         
         if(self.mag>1 and d100()>50):
-            #chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
-            chosedSpell=self.knowSpell[1]
+            chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
+            #chosedSpell=self.knowSpell[1]
             eval(chosedSpell[2]+'(self,target,fighters)')            
             #magicDart(self,target,fighters)
             punti=punti-chosedSpell[3]
