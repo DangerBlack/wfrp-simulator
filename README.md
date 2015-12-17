@@ -5,7 +5,6 @@ A python tools for simulating a battle in the wfrp II edition world
 
 ```bash
 sudo apt-get install python-yaml
-pip3 install Pillow
 pip3 install pyyaml
 ```
 
@@ -39,6 +38,18 @@ skill:
 - 'isSharpshooter()'
 - 'maxNumberOfFend(1)'
 - 'canDodge()'
+```
+
+in order to use magic add the specific spell to the skill list as following
+```yaml
+skill: 
+- 'magic([["magic dart","attack","magicDart",1],["release","attack","releaseForce",1]])'
+```
+
+remember each spell must be in the form:
+
+```yaml
+["SPELL NAME","kind of spell","function name",action_time]
 ```
 
 remove from *config.yaml* all the text if you want the tools in english,
