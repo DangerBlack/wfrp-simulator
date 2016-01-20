@@ -134,12 +134,16 @@ class pg:
             debug_print(self.nome,' para l\'attacco')
             self.parata=self.parata+1
                 
-        debug_print(self.nome,'subisce ['+str(da_d)+'/'+str(self.fe)+'] ferite')
+        
         if(da_d>0):
-            self.fe-=int(da_d)      
+            debug_print(self.nome,'subisce ['+str(da_d)+'/'+str(self.fe)+'] ferite')
+            self.fe-=int(da_d)
+            debug_print(self.nome,'ora gli sono rimaste '+str(self.fe)+' ferite')      
         if(self.fe<=-5):
+            debug_print(self.nome,'viene ucciso')
             self.status=-1
         else:
+            debug_print(self.nome,'un danno grave ma non letale')
             if(self.fe>-5)and(self.fe<0):
                 self.fe=0
             self.status=0
@@ -176,6 +180,7 @@ class pg:
         self.mira=True
     
     def disengage(self,target):
+        debug_print(self.nome,' mi allontano')
         self.posizione=1
         target.posizione=1  
     
@@ -369,23 +374,32 @@ class pg:
             self.reloads(target)
             punti=punti-1
         
-        if(self.mag>1 and d100()>50):
+        #debug_print(self.nome,"sono un mag? "+str(self.mag))
+        if(self.mag>=1 and d100()>30):
+            debug_print(self.nome,"Prova a lanciare una magia ")
             chosedSpell=self.knowSpell[int(random.random()*len(self.knowSpell))]
             #chosedSpell=self.knowSpell[1]
             eval(chosedSpell[2]+'(self,target,fighters)')            
             #magicDart(self,target,fighters)
             punti=punti-chosedSpell[3]
         
+        if(self.mag>=1 and self.fe<8 and punti==2 and (d10()<5)):
+            self.disengage(target)
+            punti=punti-2
+            
         if(self.arma.kind=='bow'):
             if(punti==2):
                 if(self.posizione<1) and (d10()<3):
                     self.disengage(target)
+                    punti=punti-2
                 else:
                     self.sight(target)
                     self.attack(target)
+                    punti=punti-2
             else:
                 if(punti>=1):
                     self.attack(target)
+                    punti=punti-1
                 else:
                     pass
                 
@@ -393,7 +407,10 @@ class pg:
             if(punti==2):
                 if(target.posizione>=1):
                     self.attackInCharge(target)
+                    punti=punti-2
                 else:
                     self.attackLightning(target)
+                    punti=punti-2
             else:
                 self.attack(target)
+                punti=punti-1

@@ -32,6 +32,12 @@ from pg import pg
 def debug_print(who,s):    
     if(DBG_PP_MODE):
         print('['+who+'] '+s)
+
+def debug_all(fighters):
+    debug_print("system","---------STATUS-----------")
+    for f in fighters:
+        debug_print(f.nome,str(f.ag)+" "+str(f.fe))
+    debug_print("system","-----------END-------------")
     
 def d10():
     return int(random.random()*10)+1;
@@ -73,12 +79,18 @@ def oneTeamLeft(fighters):
 
 #Simulazione vera e propria
 
+def getFigtersByName(fighters,nome):
+    for w in fighters:
+        if(w.nome==nome):
+            return w
+
+#NOT SO RANDOM WE CAN ADD MORE ENTROPY ONLY ADDING A +D10()
 def getEnemyRandom(fighters,me):
     copia=copy.deepcopy(fighters)
     copia.sort(key= lambda x:x.posizione*5+x.ac/10+x.ab/10) #accanisciti sul più debole, chi è lontano o nascosto è difficile che venga attaccato
     for w in copia:
         if(w.fazione!=me.fazione):
-            return w
+            return getFigtersByName(fighters,w.nome)
     return False
         
 def getEnemy(fighters,me):
@@ -91,17 +103,18 @@ def getEnemy(fighters,me):
         return getEnemyRandom(fighters,me)      
     
 def battle(fighters):
-    fighters.sort()
-    
+    fighters.sort()    
     counter=0
     while(not oneTeamLeft(fighters)):
         debug_print('system','=======================>round '+str(counter))
+        debug_all(fighters)
         for w in fighters:
             debug_print(w.nome,'sono armato di '+w.arma.name)
             e=getEnemy(fighters,w)
             if(e != False):
                 debug_print(w.nome,"sceglie bersaglio ["+e.nome+"]")
-                w.choseAction(fighters,e)       
+                w.choseAction(fighters,e)
+                debug_print(w.nome," <"+e.nome+"> al bersaglio rimangono ["+str(e.fe)+"]")       
                 try:        
                     if(e.status==-1):
                         fighters.remove(e)
@@ -112,7 +125,7 @@ def battle(fighters):
             debug_print(w.nome,""+str(len(w.waitEvent)))
             w.resetRoundStatus()
         counter=counter+1
-            
+    debug_print('system','FINE DI UN COMBATTIMENTO')        
     fazione=fighters[0].fazione
     vita=0
     nVivi=len(fighters) 
@@ -121,14 +134,13 @@ def battle(fighters):
     vita=vita/nVivi
     turni=counter
     return (fazione,vita,nVivi,turni)   
-    
+        
 
 def simulation(fighters,precision):
     res=[]
     for i in range(0,precision):
         copia=copy.deepcopy(fighters)
-        res.append(battle(copia))
-        
+        res.append(battle(copia))        
     
     prob={}
     vita={}
