@@ -76,6 +76,10 @@ class pg:
         self.armatura=(armatura)
         self.fazione=fazione
         self.ini=d10()+int(ag)
+        if(self.arma.kind=="bow"):
+            self.posizione=1
+        if(self.mag>=1):
+            self.posizione=1
     
     def buildFromList(self,attribute):
         a=attribute
@@ -167,9 +171,12 @@ class pg:
     def attack(self,target):
         debug_print(self.nome,' fa un attacco')
         if(d100()>self.ac+self.getBonusMira()):
+            if(self.arma.kind=="bow"):
+                target.wound(self.arma.strength(self.bf)+self.fury(),True)#bow can not be avoided
+            else:
                 target.wound(self.arma.strength(self.bf)+self.fury())
-                self.arma.reloadTime=self.arma.reloadMax
-                self.nemico=target.nome
+            self.arma.reloadTime=self.arma.reloadMax
+            self.nemico=target.nome
         debug_print(self.nome,' concluso attacco')
                 
     def magic(self,knowSpell=[]):
@@ -366,6 +373,7 @@ class pg:
         
     def choseAction(self,fighters,target):
         punti=self.azioni
+        
         if(not self.arma.reloadTime==0):
             self.reloads(target)
             punti=punti-1
@@ -381,7 +389,7 @@ class pg:
             #chosedSpell=self.knowSpell[1]
             eval(chosedSpell[2]+'(self,target,fighters)')            
             #magicDart(self,target,fighters)
-            punti=punti-chosedSpell[3]
+            punti=punti-chosedSpell[3]-1
         
         if(self.mag>=1 and self.fe<8 and punti==2 and (d10()<5)):
             self.disengage(target)
