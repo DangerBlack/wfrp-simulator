@@ -1,5 +1,10 @@
 ---
 
+NUMBER_OF_SIMULATION: 1000
+FOLDER: 'fighters/*'
+DBG_PP_MODE: False
+
+
 LENG_PRIMARY: '  AC  AB   F   R  AG Int Vol Sim'
 LENG_SECONDARY: '   A  Fe  BF  BR   M Mag Fol  PF'
 LENG_EXPLAIN: 'Questi sono i risultati al termine della simulazione'
@@ -17,3 +22,17 @@ LENG_TURN: 'turni'
 LENG_DODGE: 'puo schivare'
 
 LENG_FEND: 'puo parare'
+
+LENG_SHARPSHOOTER: 'è tiratore scelto'
+
+LENG_ACTIVE_FIGHTERS: 'Combattenti Attivi'
+LENG_NAME: 'Nome'
+LENG_KIND: 'Tipo'
+LENG_FUNCTION: 'Funzione'
+LENG_RELOAD: 'Azioni di Ricarica'
+LENG_ARMOR: 'Armatura'
+LENG_FACTION: 'Fazione'
+LENG_UPDATE: 'Aggiorna'
+LENG_RUN: 'Lancia Simulazione'
+LENG_ADD: 'Aggiungi >'
+LENG_DELETE: 'Elimina'

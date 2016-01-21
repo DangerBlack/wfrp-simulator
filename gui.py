@@ -56,7 +56,7 @@ class MainWindow(QtGui.QMainWindow):
             self.archiveListWidget.addItem(item)
         v1Box.addWidget(self.archiveListWidget)
         
-        addFighter = QtGui.QPushButton('Add >',panel);
+        addFighter = QtGui.QPushButton(config['LENG_ADD'],panel);
         addFighter.setFont(QtGui.QFont("Times", 10, QtGui.QFont.Bold));
         self.connect(addFighter, QtCore.SIGNAL('clicked()'), self.addFighterToActive);
         v1Box.addWidget(addFighter)
@@ -68,7 +68,7 @@ class MainWindow(QtGui.QMainWindow):
         
         #ADD LIST OF FIGHTER FROM FIGHTERS FOLDER
         
-        label = QtGui.QLabel('Active Fighters');
+        label = QtGui.QLabel(config['LENG_ACTIVE_FIGHTERS']);
         v2Box.addWidget(label)
         
         self.fighterListWidget = QtGui.QListWidget()
@@ -81,7 +81,7 @@ class MainWindow(QtGui.QMainWindow):
             self.fighterListWidget.addItem(item)      
         v2Box.addWidget(self.fighterListWidget)
         
-        delete = QtGui.QPushButton('Delete',panel);
+        delete = QtGui.QPushButton(config['LENG_DELETE'],panel);
         self.connect(delete, QtCore.SIGNAL('clicked()'), self.deleteFromActiveFighter);
         delete.setFont(QtGui.QFont("Times", 10, QtGui.QFont.Bold));
         v2Box.addWidget(delete)
@@ -94,7 +94,7 @@ class MainWindow(QtGui.QMainWindow):
         hIBox = QtGui.QVBoxLayout()
         hIBox.setSpacing(2)
         
-        label = QtGui.QLabel('Name');
+        label = QtGui.QLabel(config['LENG_NAME']);
         label.setMaximumHeight(30)
         hIBox.addWidget(label)
         self.inName = QtGui.QLineEdit();
@@ -104,7 +104,6 @@ class MainWindow(QtGui.QMainWindow):
         #PRIMARY LABEL
         
         primaryText = config['LENG_PRIMARY']
-        print(primaryText)
         primaryText = [primaryText[i:i+4] for i in range(0, len(primaryText), 4)]
         hPBox =QtGui.QHBoxLayout()
         hPBox.setSpacing(1)
@@ -129,7 +128,6 @@ class MainWindow(QtGui.QMainWindow):
         
         #SECONDARY LABEL
         secondaryText = config['LENG_SECONDARY']
-        print(primaryText)
         secondaryText = [secondaryText[i:i+4] for i in range(0, len(secondaryText), 4)]
         hPBox =QtGui.QHBoxLayout()
         hPBox.setSpacing(1)
@@ -161,19 +159,19 @@ class MainWindow(QtGui.QMainWindow):
         hPBox =QtGui.QHBoxLayout()
         hPBox.setSpacing(1)
         
-        label = QtGui.QLabel('name');
+        label = QtGui.QLabel(config['LENG_NAME']);
         label.setMaximumWidth(400/4)
         hPBox.addWidget(label)
         
-        label = QtGui.QLabel('kind');
+        label = QtGui.QLabel(config['LENG_KIND']);
         label.setMaximumWidth(400/4)
         hPBox.addWidget(label)
         
-        label = QtGui.QLabel('function');
+        label = QtGui.QLabel(config['LENG_FUNCTION']);
         label.setMaximumWidth(400/4)
         hPBox.addWidget(label)
         
-        label = QtGui.QLabel('reload time');
+        label = QtGui.QLabel(config['LENG_RELOAD']);
         label.setMaximumWidth(400/4)
         hPBox.addWidget(label)
         hIBox.addLayout(hPBox)
@@ -206,7 +204,7 @@ class MainWindow(QtGui.QMainWindow):
         line.setFrameShadow(QtGui.QFrame.Sunken);
         hIBox.addWidget(line);
         
-        label = QtGui.QLabel('Armor');
+        label = QtGui.QLabel(config['LENG_ARMOR']);
         hIBox.addWidget(label)
         
         self.inArmor = QtGui.QLineEdit();
@@ -217,7 +215,7 @@ class MainWindow(QtGui.QMainWindow):
         line.setFrameShadow(QtGui.QFrame.Sunken);
         hIBox.addWidget(line);
         
-        label = QtGui.QLabel('Faction');
+        label = QtGui.QLabel(config['LENG_FACTION']);
         hIBox.addWidget(label)
         
         self.inFaction = QtGui.QLineEdit();
@@ -243,7 +241,7 @@ class MainWindow(QtGui.QMainWindow):
         hIBox.addWidget(self.inSpell)
         
         
-        updateStats = QtGui.QPushButton('Update',panel);
+        updateStats = QtGui.QPushButton(config['LENG_UPDATE'],panel);
         updateStats.setFont(QtGui.QFont("Times", 10, QtGui.QFont.Bold));
         self.connect(updateStats, QtCore.SIGNAL('clicked()'), self.updateFighter);
         hIBox.addWidget(updateStats)
@@ -260,7 +258,7 @@ class MainWindow(QtGui.QMainWindow):
         self.outputBox.setMinimumHeight(150)
         v3Box.addWidget(self.outputBox)
         
-        runSimulation = QtGui.QPushButton('Run Simulation',panel);
+        runSimulation = QtGui.QPushButton(config['LENG_RUN'],panel);
         runSimulation.setFont(QtGui.QFont("Times", 10, QtGui.QFont.Bold));
         runSimulation.setMinimumHeight(50)
         self.connect(runSimulation, QtCore.SIGNAL('clicked()'), self.runSimulationWFRP);
