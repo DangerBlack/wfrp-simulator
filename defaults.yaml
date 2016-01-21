@@ -26,3 +26,5 @@ LENG_TURN: 'turn'
 LENG_DODGE: 'can dodge'
 
 LENG_FEND: 'can fend'
+
+LENG_SHARPSHOOTER: 'is sharpshooter'
