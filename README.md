@@ -1,6 +1,9 @@
 # wfrp-simulator
 A python tools for simulating a battle in the wfrp II edition world
 
+![preview](https://raw.githubusercontent.com/DangerBlack/wfrp-simulator/master/doc/preview.png)
+
+
 ###install
 
 ```bash
