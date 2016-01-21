@@ -13,44 +13,12 @@ pip3 install pyyaml
 ```
 
 ###usage
-Put in **fighters** folder all the *.yaml* files edited as following
-each file represent a single fighter.
-```yaml
-#name
-name: 'Wolf'
-#WS BS S T AG Int WP FEL
-primary: [30,0,30,30,40,14,25,0]
-#A W SB TB M Mag  IP  FP
-secondary: [1,10,3,3,6,0,0,0]
-#name kind function reloadTime
-#name: the name of the weapon
-#kind: sword (hand weapon) or bow (distance weapon)
-#function: a string that represent the function
-#reloadTime: how long I had to wait till next hit
-weapon:  ['claws','sword','sword',0]
-#armor strenght
-armor: 0
-#faction
-faction: 'A'
-skill: []
-```
 
-in the skill fields you can add some quality as following
+Add using the add button the fighter form the *Database* to the *Active Fighters* section.
+Edit them simply clicking on them and pressing the *Update* button.
+When you are ready click on *Run Simulation* and wait till something appear in the output section.
 
-```yaml
-skill: 
-- 'isSharpshooter()'
-- 'maxNumberOfFend(1)'
-- 'canDodge()'
-```
-
-in order to use magic add the specific spell to the skill list as following
-```yaml
-skill: 
-- 'magic([["magic dart","attack","magicDart",1],["release","attack","releaseForce",1]])'
-```
-
-remember each spell must be in the form:
+In the section after she sharpshooter box option you can add some magic in the form
 
 ```yaml
 ["SPELL NAME","kind of spell","function name",action_time]
