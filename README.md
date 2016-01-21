@@ -14,7 +14,7 @@ pip3 install pyyaml
 
 ###usage
 
-Add using the add button the fighter form the **Database** to the **Active Fighters** section.
+Add using the **add>** button the fighter form the **Database** to the **Active Fighters** section.
 Edit them simply clicking on them and pressing the **Update** button.
 When you are ready click on **Run Simulation** and wait till something appear in the output section.
 
