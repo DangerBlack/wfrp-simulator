@@ -4,6 +4,7 @@ A python tools for simulating a battle in the wfrp II edition world
 ###install
 
 ```bash
+sudo apt-get install python3-pyqt4
 sudo apt-get install python-yaml
 pip3 install pyyaml
 ```
@@ -56,6 +57,12 @@ remove from *config.yaml* all the text if you want the tools in english,
 for italian user only keep the file as it is.
 
 for running the tools call
+
+```bash
+python3 gui.py
+```
+
+If you want to run without the guy add the call to main function and run with
 
 ```bash
 python3 wfrp.py

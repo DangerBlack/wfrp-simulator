@@ -29,7 +29,10 @@ from pg import pg
 
 #Funzioni utili sempre
 
-def debug_print(who,s):    
+global DBG_PP_MODE
+
+def debug_print(who,s):
+    global DBG_PP_MODE  
     if(DBG_PP_MODE):
         print('['+who+'] '+s)
 
@@ -160,52 +163,64 @@ def simulation(fighters,precision):
     
     return (prob,vita,nVivi,turni)
 
-config = load_config_file()
 
-FOLDER=config['FOLDER']
+def main():
+    global DBG_PP_MODE
+    config = load_config_file()
 
-combattenti=load_fighter(FOLDER)
+    FOLDER=config['FOLDER']
 
-NUMBER_OF_SIMULATION=config['NUMBER_OF_SIMULATION']
+    combattenti=load_fighter(FOLDER)
+
+    NUMBER_OF_SIMULATION=config['NUMBER_OF_SIMULATION']
 
 
-LENG_EXPLAIN=config['LENG_EXPLAIN']
-LENG_WOUNDS=config['LENG_WOUNDS']
-LENG_ALIVE=config['LENG_ALIVE']
-LENG_TURN=config['LENG_TURN']
+    LENG_EXPLAIN=config['LENG_EXPLAIN']
+    LENG_WOUNDS=config['LENG_WOUNDS']
+    LENG_ALIVE=config['LENG_ALIVE']
+    LENG_TURN=config['LENG_TURN']
 
-DBG_PP_MODE=config['DBG_PP_MODE']
-if(not DBG_PP_MODE):
-    workers=[]
-    pool = Pool()
-    ncore=multiprocessing.cpu_count()
-    for i in range(0,ncore):
-        workers.append(pool.apply_async(simulation,[combattenti,int(NUMBER_OF_SIMULATION/ncore)]))
-    pool.close()
-    pool.join()
+    DBG_PP_MODE=config['DBG_PP_MODE']
+    if(not DBG_PP_MODE):
+        workers=[]
+        pool = Pool()
+        ncore=multiprocessing.cpu_count()
+        for i in range(0,ncore):
+            workers.append(pool.apply_async(simulation,[combattenti,int(NUMBER_OF_SIMULATION/ncore)]))
+        pool.close()
+        pool.join()
 
-    prob={}
-    vita={}
-    nVivi={}
-    turni={}
-    for w in workers:
-        res=w.get()
-        for r in res[0]:
-            prob[r[0]]=prob.get(r[0],0)+res[0][r[0]]    
-            vita[r[0]]=vita.get(r[0],0)+float(res[1][r[0]])
-            nVivi[r[0]]=nVivi.get(r[0],0)+float(res[2][r[0]])
-            turni[r[0]]=turni.get(r[0],0)+float(res[3][r[0]])
+        prob={}
+        vita={}
+        nVivi={}
+        turni={}
+        for w in workers:
+            res=w.get()
+            for r in res[0]:
+                prob[r[0]]=prob.get(r[0],0)+res[0][r[0]]    
+                vita[r[0]]=vita.get(r[0],0)+float(res[1][r[0]])
+                nVivi[r[0]]=nVivi.get(r[0],0)+float(res[2][r[0]])
+                turni[r[0]]=turni.get(r[0],0)+float(res[3][r[0]])
 
-    for key in prob:
-        vita[key]=vita[key]/len(workers)
-        nVivi[key]=nVivi[key]/len(workers)
-        turni[key]=turni[key]/len(workers)
-        prob[key]=prob[key]/len(workers)
-            
-    result=(prob,vita,nVivi,turni)
-else:
-    result=simulation(combattenti,NUMBER_OF_SIMULATION)
+        for key in prob:
+            vita[key]=vita[key]/len(workers)
+            nVivi[key]=nVivi[key]/len(workers)
+            turni[key]=turni[key]/len(workers)
+            prob[key]=prob[key]/len(workers)
+                
+        result=(prob,vita,nVivi,turni)
+    else:
+        result=simulation(combattenti,NUMBER_OF_SIMULATION)
 
-print(LENG_EXPLAIN)
-for r in result[0]:
-    print(r+': '+pN(result[0][r])+'% '+pN(round(result[1][r],2))+' '+LENG_WOUNDS+' '+pN(round(result[2][r],2))+' '+LENG_ALIVE+' '+pN(round(result[3][r],2))+' '+LENG_TURN+' ')
+    print(LENG_EXPLAIN)
+    for r in result[0]:
+        print(r+': '+pN(result[0][r])+'% '+pN(round(result[1][r],2))+' '+LENG_WOUNDS+' '+pN(round(result[2][r],2))+' '+LENG_ALIVE+' '+pN(round(result[3][r],2))+' '+LENG_TURN+' ')
+        
+    output=""
+    
+    output+=LENG_EXPLAIN+"\n"
+    for r in result[0]:
+        output+=(r+': '+pN(result[0][r])+'% '+pN(round(result[1][r],2))+' '+LENG_WOUNDS+' '+pN(round(result[2][r],2))+' '+LENG_ALIVE+' '+pN(round(result[3][r],2))+' '+LENG_TURN+' ')+"\n"
+    
+    return output
+    
